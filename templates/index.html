@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finanz-Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-primary px-4 py-3 shadow-sm">
+    <span class="navbar-brand fw-bold fs-4"><i class="bi bi-cash-coin me-2"></i>Finanz-Dashboard</span>
+    <div class="d-flex align-items-center gap-3">
+      <select id="yearSelect" class="form-select form-select-sm year-select">
+        {% for y in years %}
+        <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-light btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#transactionModal">
+        <i class="bi bi-plus-lg me-1"></i>Transaktion
+      </button>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4 py-4">
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-4">
+        <div class="card card-income h-100 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="card-label mb-1">Gesamteinnahmen</p>
+                <h3 class="fw-bold mb-0" id="totalIncome">—</h3>
+              </div>
+              <div class="icon-circle income-circle"><i class="bi bi-arrow-down-circle-fill fs-3"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4">
+        <div class="card card-expense h-100 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="card-label mb-1">Gesamtausgaben</p>
+                <h3 class="fw-bold mb-0" id="totalExpense">—</h3>
+              </div>
+              <div class="icon-circle expense-circle"><i class="bi bi-arrow-up-circle-fill fs-3"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4">
+        <div class="card card-balance h-100 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="card-label mb-1">Bilanz</p>
+                <h3 class="fw-bold mb-0" id="totalBalance">—</h3>
+              </div>
+              <div class="icon-circle balance-circle"><i class="bi bi-wallet2 fs-3"></i></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-lg-7">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-white fw-semibold border-bottom-0 pt-3">
+            <i class="bi bi-bar-chart-fill text-primary me-2"></i>Monatliche Übersicht
+          </div>
+          <div class="card-body">
+            <canvas id="monthlyChart" height="100"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-5">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-white fw-semibold border-bottom-0 pt-3">
+            <i class="bi bi-pie-chart-fill text-danger me-2"></i>Ausgaben nach Kategorie
+          </div>
+          <div class="card-body d-flex align-items-center justify-content-center">
+            <canvas id="categoryChart" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transaction Table -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-white border-bottom-0 pt-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <span class="fw-semibold"><i class="bi bi-list-ul me-2 text-secondary"></i>Transaktionen</span>
+          <div class="d-flex gap-2 flex-wrap">
+            <select id="filterMonth" class="form-select form-select-sm" style="width:auto">
+              <option value="">Alle Monate</option>
+              <option value="01">Januar</option><option value="02">Februar</option>
+              <option value="03">März</option><option value="04">April</option>
+              <option value="05">Mai</option><option value="06">Juni</option>
+              <option value="07">Juli</option><option value="08">August</option>
+              <option value="09">September</option><option value="10">Oktober</option>
+              <option value="11">November</option><option value="12">Dezember</option>
+            </select>
+            <select id="filterType" class="form-select form-select-sm" style="width:auto">
+              <option value="">Alle</option>
+              <option value="income">Einnahmen</option>
+              <option value="expense">Ausgaben</option>
+            </select>
+            <button class="btn btn-outline-secondary btn-sm" id="resetFilter">
+              <i class="bi bi-x-circle"></i> Reset
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Datum</th>
+                <th>Typ</th>
+                <th>Kategorie</th>
+                <th>Beschreibung</th>
+                <th class="text-end">Betrag</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="transactionTable">
+              <tr><td colspan="6" class="text-center text-muted py-4">Wird geladen…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- Add Transaction Modal -->
+  <div class="modal fade" id="transactionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold"><i class="bi bi-plus-circle me-2"></i>Transaktion hinzufügen</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="formError" class="alert alert-danger d-none"></div>
+          <form id="transactionForm">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Typ</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="type" id="typeIncome" value="income" checked />
+                  <label class="form-check-label" for="typeIncome">Einnahme</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="type" id="typeExpense" value="expense" />
+                  <label class="form-check-label" for="typeExpense">Ausgabe</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Betrag (€)</label>
+              <input type="number" class="form-control" id="amount" step="0.01" min="0.01" placeholder="0,00" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Kategorie</label>
+              <select class="form-select" id="category" required></select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Datum</label>
+              <input type="date" class="form-control" id="date" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Beschreibung <span class="text-muted fw-normal">(optional)</span></label>
+              <input type="text" class="form-control" id="description" maxlength="200" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+          <button class="btn btn-primary fw-semibold" id="saveTransaction">
+            <i class="bi bi-check-lg me-1"></i>Speichern
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-body text-center py-4">
+          <i class="bi bi-exclamation-triangle-fill text-warning fs-1 d-block mb-3"></i>
+          <p class="fw-semibold mb-1">Transaktion löschen?</p>
+          <p class="text-muted small">Diese Aktion kann nicht rückgängig gemacht werden.</p>
+        </div>
+        <div class="modal-footer border-0 justify-content-center pt-0">
+          <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Abbrechen</button>
+          <button class="btn btn-danger btn-sm fw-semibold" id="confirmDelete">Löschen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

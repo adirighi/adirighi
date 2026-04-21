@@ -1,0 +1,113 @@
+:root {
+  --income-color: #198754;
+  --expense-color: #dc3545;
+  --balance-color: #0d6efd;
+}
+
+body {
+  background: #f0f2f5;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* Navbar */
+.year-select {
+  width: 90px;
+  font-weight: 600;
+}
+
+/* Summary Cards */
+.card {
+  border: none;
+  border-radius: 12px;
+}
+
+.card-income {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-left: 4px solid var(--income-color);
+}
+.card-expense {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-left: 4px solid var(--expense-color);
+}
+.card-balance {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left: 4px solid var(--balance-color);
+}
+
+.card-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.icon-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+}
+.income-circle  { background: rgba(25, 135, 84, 0.15); color: var(--income-color); }
+.expense-circle { background: rgba(220, 53, 69, 0.15); color: var(--expense-color); }
+.balance-circle { background: rgba(13, 110, 253, 0.15); color: var(--balance-color); }
+
+/* Balance text colours */
+.balance-positive { color: var(--income-color); }
+.balance-negative { color: var(--expense-color); }
+
+/* Table */
+.table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.badge-income {
+  background: #d1fae5;
+  color: var(--income-color);
+  font-weight: 600;
+}
+.badge-expense {
+  background: #fee2e2;
+  color: var(--expense-color);
+  font-weight: 600;
+}
+
+.amount-income { color: var(--income-color); font-weight: 600; }
+.amount-expense { color: var(--expense-color); font-weight: 600; }
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.btn-delete:hover {
+  color: var(--expense-color);
+  background: #fee2e2;
+}
+
+/* Modal */
+.modal-content {
+  border: none;
+  border-radius: 14px;
+}
+
+/* Chart container */
+#categoryChart {
+  max-width: 320px;
+  max-height: 280px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .card h3 { font-size: 1.4rem; }
+}
