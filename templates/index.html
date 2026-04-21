@@ -12,7 +12,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-dark bg-primary px-4 py-3 shadow-sm">
     <span class="navbar-brand fw-bold fs-4"><i class="bi bi-cash-coin me-2"></i>Finanz-Dashboard</span>
-    <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
       <select id="yearSelect" class="form-select form-select-sm year-select">
         {% for y in years %}
         <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
@@ -20,6 +20,12 @@
       </select>
       <button class="btn btn-light btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#transactionModal">
         <i class="bi bi-plus-lg me-1"></i>Transaktion
+      </button>
+      <button class="btn btn-light btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#categoryModal">
+        <i class="bi bi-tags me-1"></i>Kategorien
+      </button>
+      <button class="btn btn-light btn-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#budgetModal">
+        <i class="bi bi-bullseye me-1"></i>Budgets
       </button>
     </div>
   </nav>
@@ -116,6 +122,9 @@
             <button class="btn btn-outline-secondary btn-sm" id="resetFilter">
               <i class="bi bi-x-circle"></i> Reset
             </button>
+            <button class="btn btn-outline-success btn-sm" id="exportCsv">
+              <i class="bi bi-file-earmark-arrow-down me-1"></i>CSV Export
+            </button>
           </div>
         </div>
       </div>
@@ -194,6 +203,59 @@
     </div>
   </div>
 
+  <!-- Edit Transaction Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2"></i>Transaktion bearbeiten</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="editFormError" class="alert alert-danger d-none"></div>
+          <form id="editTransactionForm">
+            <input type="hidden" id="editId" />
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Typ</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="editType" id="editTypeIncome" value="income" checked />
+                  <label class="form-check-label" for="editTypeIncome">Einnahme</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="editType" id="editTypeExpense" value="expense" />
+                  <label class="form-check-label" for="editTypeExpense">Ausgabe</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Betrag (€)</label>
+              <input type="number" class="form-control" id="editAmount" step="0.01" min="0.01" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Kategorie</label>
+              <select class="form-select" id="editCategory" required></select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Datum</label>
+              <input type="date" class="form-control" id="editDate" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Beschreibung <span class="text-muted fw-normal">(optional)</span></label>
+              <input type="text" class="form-control" id="editDescription" maxlength="200" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+          <button class="btn btn-primary fw-semibold" id="saveEditTransaction">
+            <i class="bi bi-check-lg me-1"></i>Speichern
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Delete Confirm Modal -->
   <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -206,6 +268,83 @@
         <div class="modal-footer border-0 justify-content-center pt-0">
           <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Abbrechen</button>
           <button class="btn btn-danger btn-sm fw-semibold" id="confirmDelete">Löschen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Management Modal -->
+  <div class="modal fade" id="categoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold"><i class="bi bi-tags me-2"></i>Kategorien verwalten</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="catError" class="alert alert-danger d-none"></div>
+          <div id="catSuccess" class="alert alert-success d-none"></div>
+          <div class="d-flex gap-2 mb-4">
+            <input type="text" class="form-control form-control-sm" id="newCatName"
+                   placeholder="Neue Kategorie…" maxlength="100" />
+            <select class="form-select form-select-sm" id="newCatType" style="width:auto">
+              <option value="expense">Ausgabe</option>
+              <option value="income">Einnahme</option>
+            </select>
+            <button class="btn btn-primary btn-sm text-nowrap" id="addCategoryBtn">
+              <i class="bi bi-plus-lg"></i> Hinzufügen
+            </button>
+          </div>
+          <div class="row g-3">
+            <div class="col-6">
+              <h6 class="fw-semibold text-success">
+                <i class="bi bi-arrow-down-circle-fill me-1"></i>Einnahmen
+              </h6>
+              <ul class="list-group list-group-flush" id="catListIncome"></ul>
+            </div>
+            <div class="col-6">
+              <h6 class="fw-semibold text-danger">
+                <i class="bi bi-arrow-up-circle-fill me-1"></i>Ausgaben
+              </h6>
+              <ul class="list-group list-group-flush" id="catListExpense"></ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget Planning Modal -->
+  <div class="modal fade" id="budgetModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold"><i class="bi bi-bullseye me-2"></i>Budgetplanung</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex gap-2 mb-4 align-items-center">
+            <label class="fw-semibold text-nowrap">Monat / Jahr:</label>
+            <select class="form-select form-select-sm" id="budgetMonth" style="width:auto">
+              <option value="1">Januar</option><option value="2">Februar</option>
+              <option value="3">März</option><option value="4">April</option>
+              <option value="5">Mai</option><option value="6">Juni</option>
+              <option value="7">Juli</option><option value="8">August</option>
+              <option value="9">September</option><option value="10">Oktober</option>
+              <option value="11">November</option><option value="12">Dezember</option>
+            </select>
+            <select class="form-select form-select-sm" id="budgetYear" style="width:auto"></select>
+            <button class="btn btn-outline-primary btn-sm" id="loadBudgetsBtn" title="Aktualisieren">
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </div>
+          <div id="budgetList"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
         </div>
       </div>
     </div>

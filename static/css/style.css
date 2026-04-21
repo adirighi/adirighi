@@ -107,6 +107,54 @@ body {
   max-height: 280px;
 }
 
+/* Edit button */
+.btn-edit {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+.btn-edit:hover {
+  color: var(--balance-color);
+  background: #dbeafe;
+}
+
+/* Category modal list */
+.btn-cat-delete {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.btn-cat-delete:hover {
+  color: var(--expense-color);
+  background: #fee2e2;
+}
+
+/* Budget progress */
+.budget-row .progress {
+  border-radius: 4px;
+  background: #e9ecef;
+}
+
+.budget-limit-input {
+  width: 80px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 0.85rem;
+  text-align: right;
+}
+.budget-limit-input:focus {
+  outline: none;
+  border-color: var(--balance-color);
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
 /* Responsive tweaks */
 @media (max-width: 576px) {
   .card h3 { font-size: 1.4rem; }

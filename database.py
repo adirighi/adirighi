@@ -27,6 +27,15 @@ def init_db():
             name TEXT NOT NULL UNIQUE,
             type TEXT NOT NULL CHECK(type IN ('income', 'expense'))
         );
+
+        CREATE TABLE IF NOT EXISTS budgets (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            category     TEXT    NOT NULL,
+            month        INTEGER NOT NULL CHECK(month BETWEEN 1 AND 12),
+            year         INTEGER NOT NULL,
+            limit_amount REAL    NOT NULL CHECK(limit_amount > 0),
+            UNIQUE(category, month, year)
+        );
     """)
     # Seed default categories
     defaults = [
@@ -136,6 +145,16 @@ def get_summary(year=None):
     }
 
 
+def update_transaction(tid, type_, amount, category, description, date):
+    conn = get_db()
+    conn.execute(
+        "UPDATE transactions SET type=?, amount=?, category=?, description=?, date=? WHERE id=?",
+        (type_, amount, category, description, date, tid),
+    )
+    conn.commit()
+    conn.close()
+
+
 def get_categories(type_filter=None):
     conn = get_db()
     query = "SELECT * FROM categories"
@@ -147,3 +166,52 @@ def get_categories(type_filter=None):
     rows = conn.execute(query, params).fetchall()
     conn.close()
     return [dict(r) for r in rows]
+
+
+def add_category(name, type_):
+    conn = get_db()
+    try:
+        conn.execute("INSERT INTO categories (name, type) VALUES (?, ?)", (name, type_))
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    finally:
+        conn.close()
+
+
+def delete_category(cid):
+    conn = get_db()
+    row = conn.execute("SELECT name FROM categories WHERE id = ?", (cid,)).fetchone()
+    if not row:
+        conn.close()
+        return "not_found"
+    in_use = conn.execute(
+        "SELECT 1 FROM transactions WHERE category = ? LIMIT 1", (row["name"],)
+    ).fetchone()
+    if in_use:
+        conn.close()
+        return "in_use"
+    conn.execute("DELETE FROM categories WHERE id = ?", (cid,))
+    conn.commit()
+    conn.close()
+    return "ok"
+
+
+def get_budgets(month, year):
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT * FROM budgets WHERE month=? AND year=?", (month, year)
+    ).fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def set_budget(category, month, year, limit_amount):
+    conn = get_db()
+    conn.execute(
+        "INSERT OR REPLACE INTO budgets (category, month, year, limit_amount) VALUES (?,?,?,?)",
+        (category, month, year, limit_amount),
+    )
+    conn.commit()
+    conn.close()
