@@ -26,8 +26,11 @@
 .arkd-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--arkd-gap); align-items: baseline; padding-top: 0.9rem; margin-bottom: clamp(1.5rem, 3vw, 2.5rem); border-top: 1px solid var(--arkd-ink); font-size: 0.875rem; }
 .arkd-head-title { grid-column: 1 / span 6; font-family: var(--arkd-font); font-size: 0.875rem; font-weight: 600; color: var(--arkd-ink); }
 .arkd-head-note { grid-column: 7 / -1; color: var(--arkd-muted); }
-.arkd-works { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--arkd-gap); list-style: none; padding: 0; }
-.arkd-work { background-color: var(--arkd-tile); aspect-ratio: 1; overflow: hidden; }
+.arkd-works { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--arkd-gap); row-gap: clamp(1.75rem, 3vw, 2.75rem); list-style: none; padding: 0; }
+.arkd-work { display: flex; flex-direction: column; gap: 0.15rem; }
+.arkd-work-frame { background-color: var(--arkd-tile); aspect-ratio: 1; overflow: hidden; margin-bottom: 0.6rem; }
+.arkd-work-title { font-size: 0.9375rem; line-height: 1.35; color: var(--arkd-ink); }
+.arkd-work-year { font-size: 0.875rem; line-height: 1.35; color: var(--arkd-muted); font-variant-numeric: tabular-nums; }
 .arkd-work-img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .arkd-work:hover .arkd-work-img { transform: scale(1.035); }
 .arkd-statement { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--arkd-gap); row-gap: clamp(2rem, 5vw, 4rem); }
@@ -85,18 +88,18 @@
       <p class="arkd-head-note">Aus der Serie „use whatever you find“</p>
     </div>
     <ul class="arkd-works">
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-01.jpg}}" alt="Hellblaue Papierstreifen mit farbigen Randlinien, in einen Holzrahmen gewebt"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-02.jpg}}" alt="Gewebte Streifen einer bemalten Leinwand in Orange, Grün und Rosa, mit Fäden verknotet"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-03.jpg}}" alt="Weißes Gewebe aus Karton und Spitzenbändern im Schachbrettmuster"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-04.jpg}}" alt="Dichtes Gewebe aus türkisfarbenen und dunkelblauen Garnen"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-05.jpg}}" alt="Orange gespannte Fäden mit eingewebten grünen und gelben Wollresten"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-06.jpg}}" alt="Schwarz-weißes Gewebe aus gemusterten Bändern im Zickzackmuster"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-07.jpg}}" alt="Karton und hellblaues Papier, oben und unten zu Schachbrettbändern verwebt"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-08.jpg}}" alt="Weinrote Zackenlitzen und helle Bordüren, in einen offenen Holzrahmen gewebt"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-09.jpg}}" alt="Gewebe aus bedrucktem Papier in Weiß, Grau und Hellblau mit orangen Punkten"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-10.jpg}}" alt="Gelb-orange Fäden um ein quadratisches weißes Feld in der Bildmitte"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-11.jpg}}" alt="Schwarze runde Scheibe mit sich kreuzenden roten und pinken Fäden"></li>
-      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-12.jpg}}" alt="Weißes, durchscheinendes Gewebe aus Transparentpapier im hellen Holzrahmen"></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-01.jpg}}" alt="Hellblaue Papierstreifen mit farbigen Randlinien, in einen Holzrahmen gewebt"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-02.jpg}}" alt="Gewebte Streifen einer bemalten Leinwand in Orange, Grün und Rosa, mit Fäden verknotet"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-03.jpg}}" alt="Weißes Gewebe aus Karton und Spitzenbändern im Schachbrettmuster"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-04.jpg}}" alt="Dichtes Gewebe aus türkisfarbenen und dunkelblauen Garnen"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-05.jpg}}" alt="Orange gespannte Fäden mit eingewebten grünen und gelben Wollresten"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-06.jpg}}" alt="Schwarz-weißes Gewebe aus gemusterten Bändern im Zickzackmuster"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-07.jpg}}" alt="Karton und hellblaues Papier, oben und unten zu Schachbrettbändern verwebt"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-08.jpg}}" alt="Weinrote Zackenlitzen und helle Bordüren, in einen offenen Holzrahmen gewebt"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-09.jpg}}" alt="Gewebe aus bedrucktem Papier in Weiß, Grau und Hellblau mit orangen Punkten"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-10.jpg}}" alt="Gelb-orange Fäden um ein quadratisches weißes Feld in der Bildmitte"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-11.jpg}}" alt="Schwarze runde Scheibe mit sich kreuzenden roten und pinken Fäden"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
+      <li class="arkd-work"><div class="arkd-work-frame"><img class="arkd-work-img" src="{{werk-12.jpg}}" alt="Weißes, durchscheinendes Gewebe aus Transparentpapier im hellen Holzrahmen"></div><p class="arkd-work-title">Titel</p><p class="arkd-work-year">Jahr</p></li>
     </ul>
   </section>
   <section class="arkd-block" id="statement">
