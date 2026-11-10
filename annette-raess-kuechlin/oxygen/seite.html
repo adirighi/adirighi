@@ -1,0 +1,166 @@
+<style>
+:root {
+  --arkd-paper: #ffffff;
+  --arkd-ink: #14161a;
+  --arkd-muted: #6c7078;
+  --arkd-line: #e2e3e6;
+  --arkd-tile: #f3f3f1;
+  --arkd-thread: #2f6fb3;
+  --arkd-font: 'Instrument Sans', sans-serif;
+  --arkd-gutter: clamp(1rem, 2.6vw, 2.5rem);
+  --arkd-gap: clamp(0.5rem, 1vw, 0.875rem);
+  --arkd-section: clamp(4.5rem, 10vw, 9rem);
+}
+.arkd-page { background-color: var(--arkd-paper); color: var(--arkd-ink); font-family: var(--arkd-font); font-size: 1.0625rem; line-height: 1.55; width: 100%; }
+.arkd-top { position: sticky; top: calc(var(--wp-admin--admin-bar--height, 0px) + 0px); z-index: 20; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.25rem 1.5rem; padding: 0.9rem var(--arkd-gutter); background-color: var(--arkd-paper); border-bottom: 1px solid var(--arkd-line); font-size: 0.875rem; }
+.arkd-top-name { font-weight: 600; color: var(--arkd-ink); text-decoration: none; }
+.arkd-nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; }
+.arkd-nav-link { color: var(--arkd-ink); text-decoration: none; }
+.arkd-nav-link:hover { color: var(--arkd-thread); }
+.arkd-hero { display: flex; flex-direction: column; gap: clamp(3rem, 9vw, 8rem); padding: clamp(2rem, 5vw, 4rem) var(--arkd-gutter) clamp(1.5rem, 3vw, 2.5rem); }
+.arkd-hero-meta { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--arkd-gap); row-gap: 1rem; }
+.arkd-hero-place { grid-column: 1 / span 4; color: var(--arkd-muted); }
+.arkd-hero-claim { grid-column: 7 / -1; font-size: clamp(1.35rem, 1rem + 1.4vw, 2.1rem); line-height: 1.25; max-width: 24ch; text-wrap: balance; }
+.arkd-hero-name { font-family: var(--arkd-font); font-size: clamp(2.5rem, 16vw, 20rem); font-weight: 500; line-height: 0.9; letter-spacing: -0.045em; white-space: nowrap; margin-left: -0.04em; color: var(--arkd-ink); }
+.arkd-block { padding: 0 var(--arkd-gutter); margin-top: var(--arkd-section); }
+.arkd-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--arkd-gap); align-items: baseline; padding-top: 0.9rem; margin-bottom: clamp(1.5rem, 3vw, 2.5rem); border-top: 1px solid var(--arkd-ink); font-size: 0.875rem; }
+.arkd-head-title { grid-column: 1 / span 6; font-family: var(--arkd-font); font-size: 0.875rem; font-weight: 600; color: var(--arkd-ink); }
+.arkd-head-note { grid-column: 7 / -1; color: var(--arkd-muted); }
+.arkd-works { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--arkd-gap); list-style: none; padding: 0; }
+.arkd-work { background-color: var(--arkd-tile); aspect-ratio: 1; overflow: hidden; }
+.arkd-work-img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.arkd-work:hover .arkd-work-img { transform: scale(1.035); }
+.arkd-statement { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--arkd-gap); row-gap: clamp(2rem, 5vw, 4rem); }
+.arkd-lead { grid-column: 1 / -1; font-size: clamp(1.7rem, 1rem + 3vw, 3.6rem); line-height: 1.12; letter-spacing: -0.025em; font-weight: 500; max-width: 24ch; text-wrap: balance; }
+.arkd-statement-figure { grid-column: 1 / span 5; grid-row: 2; align-self: start; }
+.arkd-statement-text { grid-column: 7 / -1; grid-row: 2; display: flex; flex-direction: column; gap: 1.1em; max-width: 62ch; }
+.arkd-img { display: block; width: 100%; height: auto; }
+.arkd-vita { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--arkd-gap); row-gap: 3rem; }
+.arkd-vita-title { grid-column: 1 / span 6; font-family: var(--arkd-font); font-size: clamp(1.35rem, 1rem + 1.4vw, 2.1rem); font-weight: 500; letter-spacing: -0.015em; line-height: 1.2; color: var(--arkd-ink); }
+.arkd-vita-list { grid-column: 7 / -1; border-bottom: 1px solid var(--arkd-line); }
+.arkd-vita-row { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); column-gap: 1rem; padding: 0.6rem 0; border-top: 1px solid var(--arkd-line); }
+.arkd-vita-year { color: var(--arkd-muted); font-variant-numeric: tabular-nums; }
+.arkd-contact { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--arkd-gap); padding: 0 var(--arkd-gutter); margin-top: var(--arkd-section); }
+.arkd-contact-head { grid-column: 1 / -1; }
+.arkd-mail { grid-column: 1 / -1; font-size: clamp(1.25rem, 5.2vw, 5.5rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1.05; overflow-wrap: anywhere; color: var(--arkd-ink); text-decoration: underline; text-decoration-thickness: 0.04em; text-underline-offset: 0.14em; }
+.arkd-mail:hover { color: var(--arkd-thread); }
+.arkd-contact-figure { grid-column: 7 / span 4; margin-top: clamp(2.5rem, 6vw, 5rem); }
+.arkd-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; margin-top: var(--arkd-section); padding: 1rem var(--arkd-gutter) 1.5rem; border-top: 1px solid var(--arkd-line); font-size: 0.875rem; color: var(--arkd-muted); }
+.arkd-foot-link { color: var(--arkd-muted); text-decoration: underline; text-underline-offset: 0.2em; }
+.arkd-foot-link:hover { color: var(--arkd-thread); }
+@media (max-width: 767px) {
+  .arkd-hero-place { grid-column: 1 / -1; }
+  .arkd-hero-claim { grid-column: 1 / -1; }
+  .arkd-head-title { grid-column: 1 / span 4; }
+  .arkd-head-note { grid-column: 5 / -1; text-align: right; }
+  .arkd-works { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .arkd-statement-figure { grid-column: 1 / -1; grid-row: auto; }
+  .arkd-statement-text { grid-column: 1 / -1; grid-row: auto; }
+  .arkd-vita-title { grid-column: 1 / -1; margin-bottom: -1.75rem; }
+  .arkd-vita-list { grid-column: 1 / -1; }
+  .arkd-vita-row { grid-template-columns: 5.75rem minmax(0, 1fr); }
+  .arkd-contact-figure { grid-column: 1 / -1; }
+}
+</style>
+<div class="arkd-page">
+  <header class="arkd-top">
+    <a class="arkd-top-name" href="#start">Annette Räss-Küchlin</a>
+    <nav class="arkd-nav" aria-label="Hauptnavigation">
+      <a class="arkd-nav-link" href="#arbeiten">Arbeiten</a>
+      <a class="arkd-nav-link" href="#statement">Statement</a>
+      <a class="arkd-nav-link" href="#vita">Vita</a>
+      <a class="arkd-nav-link" href="#kontakt">Kontakt</a>
+    </nav>
+  </header>
+  <section class="arkd-hero" id="start">
+    <div class="arkd-hero-meta">
+      <p class="arkd-hero-place">Künstlerin<br>Freiburg im Breisgau</p>
+      <p class="arkd-hero-claim">Webarbeiten aus Leinwand, Papier, Bändern und allem, was sich findet.</p>
+    </div>
+    <h1 class="arkd-hero-name">Annette<br>Räss-Küchlin</h1>
+  </section>
+  <section class="arkd-block" id="arbeiten">
+    <div class="arkd-head">
+      <h2 class="arkd-head-title">Arbeiten</h2>
+      <p class="arkd-head-note">Aus der Serie „use whatever you find“</p>
+    </div>
+    <ul class="arkd-works">
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-01.jpg}}" alt="Hellblaue Papierstreifen mit farbigen Randlinien, in einen Holzrahmen gewebt"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-02.jpg}}" alt="Gewebte Streifen einer bemalten Leinwand in Orange, Grün und Rosa, mit Fäden verknotet"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-03.jpg}}" alt="Weißes Gewebe aus Karton und Spitzenbändern im Schachbrettmuster"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-04.jpg}}" alt="Dichtes Gewebe aus türkisfarbenen und dunkelblauen Garnen"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-05.jpg}}" alt="Orange gespannte Fäden mit eingewebten grünen und gelben Wollresten"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-06.jpg}}" alt="Schwarz-weißes Gewebe aus gemusterten Bändern im Zickzackmuster"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-07.jpg}}" alt="Karton und hellblaues Papier, oben und unten zu Schachbrettbändern verwebt"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-08.jpg}}" alt="Weinrote Zackenlitzen und helle Bordüren, in einen offenen Holzrahmen gewebt"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-09.jpg}}" alt="Gewebe aus bedrucktem Papier in Weiß, Grau und Hellblau mit orangen Punkten"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-10.jpg}}" alt="Gelb-orange Fäden um ein quadratisches weißes Feld in der Bildmitte"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-11.jpg}}" alt="Schwarze runde Scheibe mit sich kreuzenden roten und pinken Fäden"></li>
+      <li class="arkd-work"><img class="arkd-work-img" src="{{werk-12.jpg}}" alt="Weißes, durchscheinendes Gewebe aus Transparentpapier im hellen Holzrahmen"></li>
+    </ul>
+  </section>
+  <section class="arkd-block" id="statement">
+    <div class="arkd-head">
+      <h2 class="arkd-head-title">Statement</h2>
+    </div>
+    <div class="arkd-statement">
+      <p class="arkd-lead">Ihre Bilder entstammen einem starken emotionalen Kern. Das Erschreckende und Traurige ebenso wie das Schöne und Hoffnungsvolle.</p>
+      <figure class="arkd-statement-figure"><img class="arkd-img" src="{{objekte.jpg}}" alt="Sechs kleine Schalen, jeweils mit farbigen Garnen und Fäden umwebt"></figure>
+      <div class="arkd-statement-text">
+        <p>Ohne jedes Bedenken geht Annette Räss-Küchlin intuitiv vor und zeigt, was sie bewegt und ihr Leben geprägt hat. Fragestellungen nach einer nachhaltigen Lebensweise beschäftigen dabei die Künstlerin, diese veranlassen sie, gebrauchte und nutzlose Materialien zu verweben.</p>
+        <p>Durch die Reflexion einer herkömmlichen Leinwand als Gewebe geht sie hinter die Malerei zurück und stellt dabei etwas Handfestes an die Seite des Immateriellen aller Wahrnehmung. Annette Räss-Küchlin hinterfragt mit diesem Vorgehen die Leinwand als Gewebe, untersucht deren Funktion als Malgrund und bricht die Grenzen eines Bildes und seines Trägermaterials auf. Das Weben führt dabei nicht nur zur Stabilität, sondern auch zu einer regelmäßigen Struktur, deren Gebundenheit mehrheitlich das Quadrat ist.</p>
+        <p>Ihre Werkgruppe „use whatever you find“ steht für ihre Arbeitsweise, die das Potential im Einfachen und Unentdeckten sieht und dies ins Licht rückt. Der Prozess der Materialfindung und die mechanische Fertigstellung gehen im vibrierenden Gleichschritt. So enthalten ihre Arbeiten Bordüren, Industriebänder, Papier, Fehldrucke, ja sogar Waschmittelkartons. Auf diese Weise begründet sie den zeitgenössischen Anspruch der Fortführung des Webens als künstlerisch gestalterische Technik.</p>
+      </div>
+    </div>
+  </section>
+  <section class="arkd-block" id="vita">
+    <div class="arkd-head">
+      <h2 class="arkd-head-title">Vita</h2>
+    </div>
+    <div class="arkd-vita">
+      <h3 class="arkd-vita-title">Werdegang</h3>
+      <dl class="arkd-vita-list">
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2001-04</dt><dd>Kunstkolleg an der freien Hochschule für Grafik-Design &amp; Bildende Kunst, freie Malerei in Freiburg</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2006-23</dt><dd>Atelier im Kunsthaus L6</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">seit 2009</dt><dd>Mitglied in der GEDOK Freiburg</dd></div>
+      </dl>
+      <h3 class="arkd-vita-title">Einzelausstellungen</h3>
+      <dl class="arkd-vita-list">
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2024</dt><dd>Galerie Strich und Faden, Freiburg</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2019</dt><dd>Quartiertreff 46, Freiburg-Zähringen</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2017</dt><dd>Evangelisches Stift Freiburg</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2017</dt><dd>Restaurant Papiermuseum Basel</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2015</dt><dd>Stimmpunkt Freiburg</dd></div>
+      </dl>
+      <h3 class="arkd-vita-title">Gruppenausstellungen</h3>
+      <dl class="arkd-vita-list">
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2026</dt><dd>Regionale Donaueschingen</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2026</dt><dd>Galerie K5, Freiburg, „geschnitten und gewoben“</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2025</dt><dd>Galerie K5, Freiburg, „klein und fein“</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2021</dt><dd>Kunstforum Kork</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2018</dt><dd>Mitgliederausstellung des BBK, Künstlerwerkstatt L6</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2016</dt><dd>Modehaus Kaiser Freiburg, „fashion meets art“</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2013</dt><dd>Symposium Arbeitskreis Kunst und Kultur, Ehrenkirchen</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2013</dt><dd>Kunsthaus L6, Freiburg</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2012</dt><dd>Stadtmuseum Hüfingen</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2011, 2012</dt><dd>GEDOK Freiburg, Amtsgericht</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2010</dt><dd>Galerie Birkhofer, Gottenheim</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2010</dt><dd>GEDOK Freiburg, Schwarzes Kloster</dd></div>
+        <div class="arkd-vita-row"><dt class="arkd-vita-year">2006, 2009</dt><dd>Kunsthaus L6, Freiburg</dd></div>
+      </dl>
+    </div>
+  </section>
+  <section class="arkd-contact" id="kontakt">
+    <div class="arkd-head arkd-contact-head">
+      <h2 class="arkd-head-title">Kontakt</h2>
+      <p class="arkd-head-note">Anfragen zu Arbeiten und Ausstellungen</p>
+    </div>
+    <a class="arkd-mail" href="mailto:Annette.Raess-Kuechlin@t-online.de">Annette.Raess-Kuechlin@t-online.de</a>
+    <figure class="arkd-contact-figure"><img class="arkd-img" src="{{papier.jpg}}" alt="Gewebe aus bunt geblümtem Papier in Hellblau, an den Rändern offene Streifen"></figure>
+  </section>
+  <footer class="arkd-foot">
+    <p>© 2026 Annette Räss-Küchlin</p>
+    <p>Mitglied der <a class="arkd-foot-link" href="https://www.gedok-freiburg.de/">GEDOK Freiburg</a></p>
+    <p><a class="arkd-foot-link" href="#start">Nach oben</a></p>
+  </footer>
+</div>
